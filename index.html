@@ -33,6 +33,7 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 body{
   font-family:'Syne',sans-serif;
@@ -218,6 +219,8 @@ body{
 
 <!-- stage -->
 <div class="stage">
+    <h1 class="sr-only">Online Watch Movement Lift Angle Database</h1>
+    <p class="sr-only">Angle is a free, instant goniometer for watchmakers and collectors: look up the correct lift angle for ETA, Sellita, Seiko, Miyota, Rolex, Omega, Patek Philippe, Tudor and 50+ mechanical watch calibres before setting amplitude on a timegrapher. An instrument by Velocity.</p>
   <div class="dial-wrap" id="dialWrap">
     <svg class="dial" id="dial" viewBox="0 0 560 348" aria-hidden="true"></svg>
     <div class="readout">
