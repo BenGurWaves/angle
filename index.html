@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle // Watch Movement Lift Angle Database</title>
+    <meta name="description" content="Watch Movement Lift Angle Database - Instant lookup tool for watchmakers to find lift angles for ETA, Seiko, Miyota, Sellita, Rolex, and other mechanical watch calibers.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --noir: #050505;
+            --copper: #B87C5A;
+            --parchment: #E8D5BC;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--noir);
+            color: var(--parchment);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(184, 124, 90, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(184, 124, 90, 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Vertical SEO Text */
+        body::after {
+            content: 'SYSTEM.REF // WATCH MOVEMENT LIFT ANGLE DATABASE // VOL.04';
+            position: fixed;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: left center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.2em;
+            color: rgba(184, 124, 90, 0.3);
+            text-transform: uppercase;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--parchment);
+            margin-bottom: 8px;
+            text-transform: lowercase;
+        }
+
+        .logo .g-rotated {
+            display: inline-block;
+            transform: rotate(52deg);
+        }
+
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: var(--copper);
+            text-transform: uppercase;
+        }
+
+        .search-container {
+            margin-bottom: 32px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(5, 5, 5, 0.8);
+            border: 1px solid rgba(184, 124, 90, 0.3);
+            border-radius: 8px;
+            color: var(--parchment);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--copper);
+        }
+
+        .search-input::placeholder {
+            color: rgba(232, 213, 188, 0.3);
+        }
+
+        .results {
+            min-height: 200px;
+        }
+
+        .result-item {
+            background: rgba(5, 5, 5, 0.6);
+            border: 1px solid rgba(184, 124, 90, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .result-item:hover {
+            border-color: rgba(184, 124, 90, 0.4);
+            background: rgba(5, 5, 5, 0.8);
+        }
+
+        .result-caliber {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--parchment);
+            margin-bottom: 4px;
+        }
+
+        .result-note {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: rgba(232, 213, 188, 0.5);
+            text-transform: uppercase;
+        }
+
+        .result-angle {
+            text-align: right;
+        }
+
+        .angle-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--copper);
+            letter-spacing: 0.05em;
+        }
+
+        .copy-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            color: rgba(232, 213, 188, 0.5);
+            text-transform: uppercase;
+            background: none;
+            border: 1px solid rgba(184, 124, 90, 0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            color: var(--copper);
+            border-color: var(--copper);
+        }
+
+        .copy-btn.copied {
+            color: var(--copper);
+            border-color: var(--copper);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: rgba(232, 213, 188, 0.4);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .footer {
+            margin-top: 48px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            color: rgba(184, 124, 90, 0.4);
+            text-transform: uppercase;
+        }
+
+        .footer a {
+            color: var(--copper);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+            color: var(--parchment);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .logo {
+                font-size: 40px;
+            }
+
+            .result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .result-angle {
+                text-align: left;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .angle-value {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">angle</div>
+            <div class="tagline">Watch Movement Lift Angle Database</div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search caliber (e.g., 2824, 4R36)..." autofocus>
+        </div>
+
+        <div class="results" id="results">
+            <div class="no-results">Start typing a caliber...</div>
+        </div>
+
+        <div class="footer">
+            Angle by <a href="https://velocity.calyvent.com" target="_blank">Calyvent</a>
+        </div>
+    </div>
+
+    <script>
+        const movements = [
+            { caliber: "ETA 2824-2", angle: 50, note: "Most common Swiss movement" },
+            { caliber: "ETA 2892-A2", angle: 50, note: "Thinner variant of 2824" },
+            { caliber: "ETA 7750", angle: 52, note: "Chronograph movement" },
+            { caliber: "ETA 6497", angle: 52, note: "Pocket watch movement" },
+            { caliber: "ETA 7001", angle: 52, note: "Small seconds movement" },
+            { caliber: "Sellita SW200-1", angle: 50, note: "ETA 2824 clone" },
+            { caliber: "Sellita SW300-1", angle: 50, note: "ETA 2892 clone" },
+            { caliber: "Sellita SW500", angle: 52, note: "ETA 7750 clone" },
+            { caliber: "Seiko 4R36", angle: 53, note: "NH35 equivalent" },
+            { caliber: "Seiko NH35", angle: 53, note: "4R36 equivalent" },
+            { caliber: "Seiko 6R15", angle: 52, note: "Higher grade movement" },
+            { caliber: "Seiko 7S26", angle: 52, note: "Entry level movement" },
+            { caliber: "Seiko 9S55", angle: 52, note: "Grand Seiko movement" },
+            { caliber: "Miyota 8215", angle: 52, note: "Entry level movement" },
+            { caliber: "Miyota 9015", angle: 52, note: "High beat movement" },
+            { caliber: "Miyota 9130", angle: 52, note: "GMT movement" },
+            { caliber: "Rolex 3135", angle: 52, note: "Submariner movement" },
+            { caliber: "Rolex 3235", angle: 52, note: "Modern Submariner movement" },
+            { caliber: "Rolex 4130", angle: 52, note: "Daytona chronograph" },
+            { caliber: "Rolex 9001", angle: 52, note: "Sky-Dweller movement" },
+            { caliber: "Rolex 3255", angle: 52, note: "Day-Date movement" },
+            { caliber: "Omega 1120", angle: 52, note: "ETA 2892 based" },
+            { caliber: "Omega 2500", angle: 52, note: "Co-axial movement" },
+            { caliber: "Omega 8500", angle: 52, note: "Co-axial movement" },
+            { caliber: "Omega 8900", angle: 52, note: "Master Co-Axial" },
+            { caliber: "Omega 9300", angle: 52, note: "Chronograph" },
+            { caliber: "Tudor MT5612", angle: 52, note: "In-house movement" },
+            { caliber: "Tudor MT5602", angle: 52, note: "Black Bay movement" },
+            { caliber: "Patek 324", angle: 52, note: "Nautilus movement" },
+            { caliber: "Patek 29-535", angle: 52, note: "Chronograph" },
+            { caliber: "Audemars 2120", angle: 52, note: "Royal Oak movement" },
+            { caliber: "Audemars 4400", angle: 52, note: "Royal Oak movement" },
+            { caliber: "Vacheron 2450", angle: 52, note: "Patrimony movement" },
+            { caliber: "Vacheron 5100", angle: 52, note: "Overseas movement" },
+            { caliber: "Cartier 1904", angle: 52, note: "Calibre de Cartier" },
+            { caliber: "Cartier 1847", angle: 52, note: "Santos movement" },
+            { caliber: "IWC 69355", angle: 52, note: "Chronograph" },
+            { caliber: "IWC 52010", angle: 52, note: "Portugieser movement" },
+            { caliber: "IWC 52610", angle: 52, note: "Da Vinci movement" },
+            { caliber: "Jaeger 899", angle: 52, note: "Master Control" },
+            { caliber: "Jaeger 925", angle: 52, note: "Reverso movement" },
+            { caliber: "Glashütte 100", angle: 52, note: "Senator movement" },
+            { caliber: "Glashütte 36", angle: 52, note: "Senator movement" },
+            { caliber: "Nomos Alpha", angle: 52, note: "Tangente movement" },
+            { caliber: "Nomos Epsilon", angle: 52, note: "Club movement" },
+            { caliber: "Nomos DUW 3001", angle: 52, note: "Swing system" },
+            { caliber: "Nomos DUW 6101", angle: 52, note: "Date movement" },
+            { caliber: "Stowa 2801", angle: 52, note: "ETA 2801 based" },
+            { caliber: "Laco 2801", angle: 52, note: "ETA 2801 based" },
+            { caliber: "Sinn 2801", angle: 52, note: "ETA 2801 based" },
+            { caliber: "Hamilton 2801", angle: 52, note: "ETA 2801 based" },
+            { caliber: "Hamilton H-10", angle: 52, note: "Powermatic movement" },
+            { caliber: "Hamilton H-30", angle: 52, note: "Powermatic movement" }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('results');
+
+        function renderResults(filtered) {
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">Caliber not found</div>';
+                return;
+            }
+
+            resultsContainer.innerHTML = filtered.map(m => `
+                <div class="result-item">
+                    <div>
+                        <div class="result-caliber">${m.caliber}</div>
+                        <div class="result-note">${m.note}</div>
+                    </div>
+                    <div class="result-angle">
+                        <div class="angle-value">${m.angle}°</div>
+                        <button class="copy-btn" onclick="copyAngle(${m.angle}, this)">Copy</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function copyAngle(angle, btn) {
+            navigator.clipboard.writeText(angle.toString());
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.classList.remove('copied');
+            }, 1500);
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query === '') {
+                resultsContainer.innerHTML = '<div class="no-results">Start typing a caliber...</div>';
+                return;
+            }
+
+            const filtered = movements.filter(m => 
+                m.caliber.toLowerCase().includes(query) ||
+                m.angle.toString().includes(query)
+            );
+            
+            renderResults(filtered);
+        });
+
+        searchInput.focus();
+    </script>
+</body>
+</html>
